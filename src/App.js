@@ -1,29 +1,8 @@
 import React from 'react';
-
+import axios from 'axios';
 import Card from './components/Card';
 import Header from './components/Header';
 import Drawer from './components/Drawer';
-
-// const arr = [
-//   {
-//     "title": "Мужские Кроссовки Nike Blazer Min Suede",
-//     "price": 12999,
-//     "imageUrl": "/img/sneakers/1.jpg"
-//   },
-//   { "title": "Мужские Кроссовки Nike Air Max 270",
-//    "price": 15600,
-//   "imageUrl": "/img/sneakers/2.jpg" },
-//   {
-//     "title": "Мужские Кроссовки Nike Blazer Mid Suede",
-//     "price": 8499,
-//     "imageUrl": "/img/sneakers/3.jpg"
-//   },
-//   {
-//     "title": "Кроссовки Puma X Aka Boku Future Rider",
-//     "price": 7800,
-//     "imageUrl": "/img/sneakers/4.jpg"
-//   }
-// ]
 
 // [
 //   {
@@ -49,57 +28,48 @@ import Drawer from './components/Drawer';
 // ]
 
 function App() {
-  const [items, setItems] = React.useState([
-    {
-      title: 'Мужские Кроссовки Nike Blazer Mini Suede',
-      price: 12999,
-      imageUrl: '/img/sneakers/1.jpg',
-    },
-    {
-      title: 'Мужские Кроссовки Nike Air Max 270',
-      price: 15600,
-      imageUrl: '/img/sneakers/2.jpg',
-    },
-    {
-      title: 'Мужские Кроссовки Nike Blazer Mid Suede',
-      price: 8499,
-      imageUrl: '/img/sneakers/3.jpg',
-    },
-    {
-      title: 'Кроссовки Puma X Aka Boku Future Rider',
-      price: 7800,
-      imageUrl: '/img/sneakers/4.jpg',
-    },
-  ]);
+  const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
   const [cartOpened, setCardOpened] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
 
-  // React.useEffect(() => {
-  //   fetch('https://63fbac6f1ff79e133292f748.mockapi.io/:endpoint')
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((json) => setItems(json))
-  //     .catch((err) => console.warn(err));
-  // }, []);
+  React.useEffect(() => {
+    // fetch('https://63fbac6f1ff79e133292f748.mockapi.io/items')
+    //   .then((res) => {
+    //     return res.json();
+    //   })
+    //   .then((json) => {
+    //     console.log(json);
+    //     setItems(json.items);
+    //   });
+    axios
+      .get('https://63fbac6f1ff79e133292f748.mockapi.io/items')
+      .then((res) => setItems(res.data));
+    axios
+      .get('https://63fbac6f1ff79e133292f748.mockapi.io/cart')
+      .then((res) => setCartItems(res.data));
+  }, []);
 
   const onAddToCart = (obj) => {
-    // if (cartItems.contains(obj)) {
-    //   return cartItems;
-    // }
+    axios.post('https://63fbac6f1ff79e133292f748.mockapi.io/cart', obj);
     setCartItems((prev) => [...prev, obj]);
-    // console.log(cartItems);
   };
 
   const onChangeSearchInput = (event) => {
-    // console.log(event.target.value);
     setSearchValue(event.target.value);
+  };
+
+  const onRemoveItem = (id) => {
+    axios.delete(`https://63fbac6f1ff79e133292f748.mockapi.io/cart/${id}`);
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    // console.log(id);
   };
 
   return (
     <div className="wrapper clear">
-      {cartOpened && <Drawer items={cartItems} onClose={() => setCardOpened(false)} />}
+      {cartOpened && (
+        <Drawer onRemove={onRemoveItem} items={cartItems} onClose={() => setCardOpened(false)} />
+      )}
       <Header onClickCart={() => setCardOpened(true)} />
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-40">
@@ -124,7 +94,6 @@ function App() {
             .map((item) => (
               <Card
                 key={item.title}
-                // id={id}
                 title={item.title}
                 price={item.price}
                 imageUrl={item.imageUrl}
