@@ -1,4 +1,5 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import Card from './components/Card';
 import Header from './components/Header';
@@ -82,6 +83,9 @@ function App() {
         <Drawer onRemove={onRemoveItem} items={cartItems} onClose={() => setCardOpened(false)} />
       )}
       <Header onClickCart={() => setCardOpened(true)} />
+      <Routes>
+        <Route path="/test" element={<h3>yarn add react-router-dom</h3>}></Route>
+      </Routes>
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-40">
           <h1>{searchValue ? `Поиск по запросу: ${searchValue}` : 'Все кроссовки'}</h1>
