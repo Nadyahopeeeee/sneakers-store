@@ -151,6 +151,11 @@ header {
   cursor: pointer;
   transition: background 0.1s ease-in-out;
 
+  &:disabled {
+    background-color: #bebebe;
+    cursor: default;
+  }
+
   &:hover {
     background: lighten(#9dd558, 5%);
   }
@@ -171,6 +176,10 @@ header {
   .greenButton {
     width: 245px;
     margin-top: 20px;
+
+    &:disabled {
+      animation: button-loading 0.6s ease-in-out infinite;
+    }
 
     &:hover {
       img {
@@ -220,5 +229,17 @@ header {
     &:hover {
       opacity: 1;
     }
+  }
+}
+
+@keyframes button-loading {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
   }
 }
