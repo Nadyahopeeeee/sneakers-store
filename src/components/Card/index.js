@@ -6,6 +6,7 @@ import styles from './Card.module.scss';
 
 function Card({
   id,
+  parentId,
   title,
   imageUrl,
   price,
@@ -16,13 +17,14 @@ function Card({
 }) {
   const { isItemAdded } = React.useContext(AppContext);
   const [isFavorite, setFavorite] = React.useState(favorited);
+  const obj = { id, parentId: id, title, imageUrl, price };
 
   const onClickPlus = () => {
-    onPlus({ id, title, imageUrl, price });
+    onPlus(obj);
   };
 
   const onClickFavorite = () => {
-    onFavorite({ title, imageUrl, price });
+    onFavorite(obj);
     setFavorite(!isFavorite);
   };
 
@@ -45,13 +47,15 @@ function Card({
         </ContentLoader>
       ) : (
         <>
-          <div className={styles.favorite} onClick={onFavorite}>
-            <img
-              onClick={onClickFavorite}
-              src={`/img/heart-${isFavorite ? 'liked' : 'unliked'}.svg`}
-              alt="Unliked"
-            />
-          </div>
+          {onFavorite && (
+            <div className={styles.favorite} onClick={onFavorite}>
+              <img
+                onClick={onClickFavorite}
+                src={isFavorite ? '/img/heart-liked.svg' : '/img/heart-unliked.svg'}
+                alt="Unliked"
+              />
+            </div>
+          )}
           <img width={133} height={112} src={imageUrl} alt="Sneakers" />
           <h5>{title}</h5>
           <div className="d-flex justify-between align-center">
@@ -60,12 +64,14 @@ function Card({
               <b>{price} руб.</b>
             </div>
 
-            <img
-              className={styles.plus}
-              onClick={onClickPlus}
-              src={isItemAdded(id) ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
-              alt="Plus"
-            />
+            {onPlus && (
+              <img
+                className={styles.plus}
+                onClick={onClickPlus}
+                src={isItemAdded(id) ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
+                alt="Plus"
+              />
+            )}
           </div>
         </>
       )}
