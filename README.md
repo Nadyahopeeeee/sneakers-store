@@ -1,7 +1,7 @@
 # Интернет-магазин кроссовок
 
 ## Deploy:
-
+https://sneakers-store-nine.vercel.app/
 
 ## Stack:
 
