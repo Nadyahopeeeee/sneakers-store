@@ -1,7 +1,7 @@
 # Интернет-магазин кроссовок
 
 ## Deploy:
-https://sneakers-store-coral.vercel.app/
+
 
 ## Stack:
 
