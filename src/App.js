@@ -44,15 +44,13 @@ function App() {
     async function fetchData() {
       setIsLoading(true);
 
-      const cartResponse = await axios.get('https://63fbac6f1ff79e133292f748.mockapi.io/cart');
-      const itemsResponse = await axios.get('https://63fbac6f1ff79e133292f748.mockapi.io/items');
-      // const favoritesResponse = await axios.get(
-      //   'https://63fbac6f1ff79e133292f748.mockapi.io/favorites',
-      // );
+      const cartResponse = await axios.get('http://localhost:3001/cart');
+      const itemsResponse = await axios.get('http://localhost:3001/items');
+      const favoritesResponse = await axios.get('http://localhost:3001/favorites');
 
       setIsLoading(false);
       setCartItems(cartResponse.data);
-      // setFavorites(favoritesResponse.data);
+      setFavorites(favoritesResponse.data);
       setItems(itemsResponse.data);
     }
 
@@ -64,10 +62,10 @@ function App() {
       const findItem = cartItems.find((item) => Number(item.parentId) === Number(obj.id));
       if (findItem) {
         setCartItems((prev) => prev.filter((elem) => Number(elem.parentId) !== Number(obj.id)));
-        await axios.delete(`https://63fbac6f1ff79e133292f748.mockapi.io/cart/${findItem.id}`);
+        await axios.delete(`http://localhost:3001/cart/${findItem.id}`);
       } else {
         setCartItems((prev) => [...prev, obj]);
-        const { data } = await axios.post('https://63fbac6f1ff79e133292f748.mockapi.io/cart', obj);
+        const { data } = await axios.post('http://localhost:3001/cart', obj);
         setCartItems((prev) =>
           prev.map((item) => {
             if (item.parentId === data.parentId) {
@@ -87,9 +85,8 @@ function App() {
 
   const onRemoveItem = (id) => {
     try {
-      axios.delete(`https://63fbac6f1ff79e133292f748.mockapi.io/cart/${id}`);
+      axios.delete(`http://localhost:3001/cart/${id}`);
       setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
-      // console.log(id);}
     } catch (error) {
       console.log('Ошибка при удалении из корзины');
     }
@@ -98,13 +95,10 @@ function App() {
   const onAddToFavorite = async (obj) => {
     try {
       if (favorites.find((favObj) => Number(favObj.id) === Number(obj.id))) {
-        axios.delete(`/cart/${obj.id}`);
+        axios.delete(`http://localhost:3001/favorites/${obj.id}`);
         setFavorites((prev) => prev.filter((elem) => Number(elem.id) !== Number(obj.id)));
       } else {
-        const { data } = await axios.post(
-          'https://63fbac6f1ff79e133292f748.mockapi.io/favorites',
-          obj,
-        );
+        const { data } = await axios.post('http://localhost:3001/favorites', obj);
         setFavorites((prev) => [...prev, data]);
       }
     } catch (error) {

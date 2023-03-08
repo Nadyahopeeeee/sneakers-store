@@ -10,15 +10,16 @@ function Orders() {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    try {
-      (async () => {
-        const { data } = await axios.get('https://63fbac6f1ff79e133292f748.mockapi.io/orders');
+    (async () => {
+      try {
+        const { data } = await axios.get('http://localhost:3001/orders');
         setOrders(data.reduce((prev, obj) => [...prev, ...obj.items], []));
         setIsLoading(false);
-      })();
-    } catch (error) {
-      console.log('Заказ не получен');
-    }
+      } catch (error) {
+        alert('Ошибка при запросе заказов');
+        console.error(error);
+      }
+    })();
   }, []);
 
   return (
@@ -28,8 +29,8 @@ function Orders() {
       </div>
 
       <div className="d-flex flex-wrap">
-        {[isLoading ? [...Array(4)] : orders].map((item) => (
-          <Card key={item.id} loading={isLoading} {...item} />
+        {(isLoading ? [...Array(8)] : orders).map((item, index) => (
+          <Card key={index} loading={isLoading} {...item} />
         ))}
       </div>
     </div>

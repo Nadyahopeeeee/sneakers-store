@@ -17,17 +17,17 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
   const onClickOrder = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.post('https://63fbac6f1ff79e133292f748.mockapi.io/orders', {
+      const { data } = await axios.post('http://localhost:3001/orders', {
         items: cartItems,
       });
-      axios.put('https://63fbac6f1ff79e133292f748.mockapi.io/cart', []);
+      axios.put('http://localhost:3001/cart', []);
       setOrderId(data.id);
       setIsOrderComplete(true);
       setCartItems([]);
 
       for (let i = 0; i < Array.length; i++) {
         const item = cartItems[i];
-        await axios.delete('https://63fbac6f1ff79e133292f748.mockapi.io/cart' + item.id);
+        await axios.delete('http://localhost:3001/cart' + item.id);
         await delay(1000);
       }
     } catch (error) {
