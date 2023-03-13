@@ -15,9 +15,9 @@ function Home({
       item.title.toLowerCase().includes(searchValue.toLowerCase()),
     );
 
-    return (isLoading ? [...Array([1], [2], [3], [4])] : filteredItems).map((item) => (
+    return (isLoading ? [...Array(4)] : filteredItems).map((item, i) => (
       <Card
-        key={item.id}
+        key={i}
         onFavorite={(obj) => onAddToFavorite(obj)}
         onPlus={(obj) => onAddToCart(obj)}
         loading={isLoading}

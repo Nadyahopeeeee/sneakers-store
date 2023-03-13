@@ -1,12 +1,11 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
-import AppContext from '../../pages/context';
+import AppContext from '../../context';
 
 import styles from './Card.module.scss';
 
 function Card({
   id,
-  parentId,
   title,
   imageUrl,
   price,
@@ -16,7 +15,7 @@ function Card({
   loading = false,
 }) {
   const { isItemAdded } = React.useContext(AppContext);
-  const [isFavorite, setFavorite] = React.useState(favorited);
+  const [isFavorite, setIsFavorite] = React.useState(favorited);
   const obj = { id, parentId: id, title, imageUrl, price };
 
   const onClickPlus = () => {
@@ -25,7 +24,7 @@ function Card({
 
   const onClickFavorite = () => {
     onFavorite(obj);
-    setFavorite(!isFavorite);
+    setIsFavorite(!isFavorite);
   };
 
   return (
@@ -48,22 +47,20 @@ function Card({
       ) : (
         <>
           {onFavorite && (
-            <div className={styles.favorite} onClick={onFavorite}>
+            <div className={styles.favorite} onClick={onClickFavorite}>
               <img
-                onClick={onClickFavorite}
                 src={isFavorite ? '/img/heart-liked.svg' : '/img/heart-unliked.svg'}
                 alt="Unliked"
               />
             </div>
           )}
-          <img width={133} height={112} src={imageUrl} alt="Sneakers" />
+          <img width="100%" height={135} src={imageUrl} alt="Sneakers" />
           <h5>{title}</h5>
           <div className="d-flex justify-between align-center">
             <div className="d-flex flex-column">
               <span>Цена:</span>
               <b>{price} руб.</b>
             </div>
-
             {onPlus && (
               <img
                 className={styles.plus}

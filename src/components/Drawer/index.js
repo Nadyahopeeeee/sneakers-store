@@ -10,24 +10,24 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function Drawer({ onClose, onRemove, items = [], opened }) {
   const { cartItems, setCartItems, totalPrice } = useCart();
-  const [orderId, setOrderId] = React.useState(1);
+  const [orderId, setOrderId] = React.useState(null);
   const [isOrderComplete, setIsOrderComplete] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const onClickOrder = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.post('http://localhost:3001/orders', {
+      const { data } = await axios.post('https://10cnehewsg.api.quickmocker.com/orders', {
         items: cartItems,
       });
-      axios.put('http://localhost:3001/cart', []);
+      axios.put('https://10cnehewsg.api.quickmocker.com/cart', []);
       setOrderId(data.id);
       setIsOrderComplete(true);
       setCartItems([]);
 
       for (let i = 0; i < Array.length; i++) {
         const item = cartItems[i];
-        await axios.delete('http://localhost:3001/cart' + item.id);
+        await axios.delete('https://10cnehewsg.api.quickmocker.com/cart' + item.id);
         await delay(1000);
       }
     } catch (error) {
@@ -89,7 +89,7 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
             title={isOrderComplete ? 'Заказ оформлен' : 'Корзина пустая'}
             description={
               isOrderComplete
-                ? `Ваш заказ №${orderId} скоро будет передан в службу доставки`
+                ? `Ваш заказ #${orderId} скоро будет передан в службу доставки`
                 : 'Добавьте хотя бы одну пару кроссовок'
             }
             image={isOrderComplete ? 'img/complete-order.jpg' : 'img/empty-cart.jpg'}

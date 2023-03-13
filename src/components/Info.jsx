@@ -1,5 +1,5 @@
 import React from 'react';
-import AppContext from '../pages/context';
+import AppContext from '../context';
 
 const Info = ({ title, image, description }) => {
   const { setCardOpened } = React.useContext(AppContext);
